@@ -28,6 +28,17 @@
     box-shadow: 0 0 40px rgba(255, 0, 60, 0.15);
 }
 
+.project-card.full-width {
+    grid-template-columns: 1fr;
+}
+
+.project-card.full-width .project-info {
+    padding: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
 /* Visual Side with intense red hover */
 .project-visual {
     position: relative;

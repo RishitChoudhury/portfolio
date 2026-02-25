@@ -41,8 +41,7 @@ const Footer = ({ onOpenContact }) => {
                     <div className="footer-links-group">
                         <h4 className="footer-label mono">LOCATION</h4>
                         <ul className="footer-list mono">
-                            <li><span className="accent">📍</span> San Francisco, CA</li>
-                            <li><span className="accent">📍</span> Node_02: Berlin</li>
+                            <li><span className="accent">📍</span> Pune, India</li>
                         </ul>
                     </div>
 
@@ -60,8 +59,8 @@ const Footer = ({ onOpenContact }) => {
                                 </a>
                             </li>
                             <li>
-                                <a href="mailto:comms@nueva.sys" className="social-link">
-                                    <Mail size={16} /> comms@nueva.sys
+                                <a href="mailto:rishitchoudhury@gmail.com" className="social-link">
+                                    <Mail size={16} /> rishitchoudhury@gmail.com
                                 </a>
                             </li>
                         </ul>

@@ -40,37 +40,40 @@ const ProjectCard = ({ project }) => {
     });
 
     const parallaxY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+    const hasVisual = Boolean(project.videoUrl || project.imageUrl);
 
     return (
-        <div className="project-card" ref={cardRef}>
-
-            <div className="project-visual">
-                {project.videoUrl ? (
-                    <motion.video
-                        src={project.videoUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="project-video-inner"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                    />
-                ) : (
-                    <motion.div
-                        className="project-image-inner"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                    />
-                )}
-                {/* Wireframe reticle overlays */}
-                <div className="blueprint-overlay">
-                    <div className="reticle top-left"></div>
-                    <div className="reticle top-right"></div>
-                    <div className="reticle bottom-left"></div>
-                    <div className="reticle bottom-right"></div>
+        <div className={`project-card ${!hasVisual ? 'full-width' : ''}`} ref={cardRef}>
+            {hasVisual && (
+                <div className="project-visual">
+                    {project.videoUrl ? (
+                        <motion.video
+                            src={project.videoUrl}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="project-video-inner"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.5 }}
+                        />
+                    ) : (
+                        <motion.div
+                            className="project-image-inner"
+                            style={project.imageUrl ? { backgroundImage: `url(${project.imageUrl})` } : {}}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.5 }}
+                        />
+                    )}
+                    {/* Wireframe reticle overlays */}
+                    <div className="blueprint-overlay">
+                        <div className="reticle top-left"></div>
+                        <div className="reticle top-right"></div>
+                        <div className="reticle bottom-left"></div>
+                        <div className="reticle bottom-right"></div>
+                    </div>
                 </div>
-            </div>
+            )}
 
             <motion.div
                 className="project-info"

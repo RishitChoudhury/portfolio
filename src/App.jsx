@@ -7,7 +7,6 @@ import Capabilities from './components/Capabilities';
 import FeaturedWork from './components/FeaturedWork';
 import SystematicApproach from './components/SystematicApproach';
 import TechStack from './components/TechStack';
-import ConceptLab from './components/ConceptLab';
 import Footer from './components/Footer';
 import CyberContactForm from './components/CyberContactForm';
 
@@ -39,7 +38,6 @@ function App() {
             <FeaturedWork />
             <SystematicApproach />
             <TechStack />
-            <ConceptLab />
             <Footer onOpenContact={() => setIsContactOpen(true)} />
 
             <CyberContactForm
