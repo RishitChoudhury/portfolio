@@ -143,13 +143,39 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .footer-section {
+        padding: 6rem 1.5rem 3rem;
+    }
+
+    .footer-cta-container {
+        margin-bottom: 8rem;
+    }
+
+    .massive-cta {
+        font-size: clamp(3rem, 15vw, 6rem);
+        margin-bottom: 2rem;
+    }
+
     .cta-action-row {
-        padding: 2rem;
+        padding: 1.5rem 1rem;
+        width: 100%;
+        gap: 1.5rem;
+    }
+
+    .cta-subtext {
+        font-size: 1rem;
+        text-align: center;
     }
 
     .btn-primary.huge {
         font-size: 1rem;
-        padding: 1rem 2rem;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .footer-bottom-grid {
+        gap: 2.5rem;
+        padding-top: 3rem;
     }
 }

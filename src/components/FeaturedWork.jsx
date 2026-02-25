@@ -5,24 +5,6 @@ import './FeaturedWork.css';
 const projects = [
     {
         id: '01',
-        title: 'FINTECH TRADING CORE',
-        tag: 'SYSTEM REWRITE',
-        summary: 'Rebuilt legacy monolithic architecture into a high-frequency microservices trading engine.',
-        wins: ['Latency reduced by 94%', 'Zero-downtime deployment pipeline', '100% test coverage threshold'],
-        metric: '12M TPS',
-        metricLabel: 'Peak Throughput'
-    },
-    {
-        id: '02',
-        title: 'GLOBAL SUPPLY CHAIN API',
-        tag: 'DATA ENGINEERING',
-        summary: 'Unified 14 fragmented logistics providers into a single real-time tracking GraphQL layer.',
-        wins: ['Unified GraphQL schema', 'Websocket real-time updates', 'Automated anomaly detection'],
-        metric: '4.2B',
-        metricLabel: 'Daily Events Processed'
-    },
-    {
-        id: '03',
         title: 'SANKALP NGO PLATFORM',
         tag: 'WORKFLOW OPTIMIZATION',
         summary: 'Engineered a centralized web platform integrated with an automated document generation engine. This system shifted the organization from a manual, email-heavy workflow to a self-service digital model.',
@@ -30,7 +12,23 @@ const projects = [
         metric: '100%',
         metricLabel: 'Manual Labor Reduction',
         buttonText: 'VIEW_CASE_STUDY',
-        link: 'https://www.thesankalp.org'
+        link: 'https://www.thesankalp.org',
+        videoUrl: 'https://leefalk9yd9m859v.public.blob.vercel-storage.com/sankalp.mp4'
+    },
+    {
+        id: '02',
+        title: 'SHAPING HEARTS PLATFORM',
+        tag: 'FULL-STACK ARCHITECTURE',
+        summary: 'Developed a dual-portal system for the Neo Kah Kiat Arts Awards 2026, comprising a Next.js artist submission platform and an administrative dashboard. Solved complex artwork pricing and review workflows through a robust Prisma and PostgreSQL backend.',
+        wins: [
+            'Automated dynamic artwork pricing engine',
+            'Streamlined admin review and custom filtering workflows',
+            'Containerized zero-downtime deployment setup'
+        ],
+        metric: '100%',
+        metricLabel: 'Type-Safe Architecture',
+        buttonText: 'VIEW_PLATFORM',
+        link: 'https://github.com/RishitChoudhury/shaping-hearts.git'
     }
 ];
 
@@ -47,11 +45,24 @@ const ProjectCard = ({ project }) => {
         <div className="project-card" ref={cardRef}>
 
             <div className="project-visual">
-                <motion.div
-                    className="project-image-inner"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.5 }}
-                />
+                {project.videoUrl ? (
+                    <motion.video
+                        src={project.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="project-video-inner"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
+                    />
+                ) : (
+                    <motion.div
+                        className="project-image-inner"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
+                    />
+                )}
                 {/* Wireframe reticle overlays */}
                 <div className="blueprint-overlay">
                     <div className="reticle top-left"></div>

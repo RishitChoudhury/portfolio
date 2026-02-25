@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Marquee from './Marquee';
 import './Hero.css';
 
 const Hero = () => {
@@ -26,13 +25,11 @@ const Hero = () => {
                         </div>
 
                         <h1 className="hero-headline brutalist-text-shadow">
-                            WE BUILD
+                            WE BUILD <span className="accent">SOLUTIONS</span>.
                             <br />
-                            <span className="accent">SCALABLE</span> SYSTEMS.
+                            WEBSITES ARE
                             <br />
-                            NOT JUST
-                            <br />
-                            WEBSITES.
+                            JUST THE INTERFACE.
                         </h1>
 
                         <div className="hero-bottom-cluster">
@@ -53,29 +50,10 @@ const Hero = () => {
                                 transition={{ duration: 0.6, delay: 1 }}
                             >
                                 <a href="#work" className="btn-primary mono glow-on-hover">Explore Our Work</a>
-                                <a href="#contact" className="btn-secondary mono">Work With Us</a>
                             </motion.div>
                         </div>
                     </motion.div>
 
-                    {/* Abstract Cyberpunk Mascot/Object */}
-                    <motion.div
-                        className="hero-abstract-hologram"
-                        style={{ y: y2 }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                    >
-                        <div className="wireframe-cube">
-                            <div className="cube-face front"></div>
-                            <div className="cube-face back"></div>
-                            <div className="cube-face right"></div>
-                            <div className="cube-face left"></div>
-                            <div className="cube-face top"></div>
-                            <div className="cube-face bottom"></div>
-                        </div>
-                        <div className="hologram-glow"></div>
-                    </motion.div>
 
                     {/* Decorative elements */}
                     <motion.div
@@ -88,11 +66,6 @@ const Hero = () => {
                     />
                 </div>
             </section>
-
-            {/* Marquee Divider bridging Hero to next section */}
-            <Marquee text="SYSTEMS ENGINEERING" speed={25} direction="left" />
-            <div style={{ height: '4px' }}></div>
-            <Marquee text="NUEVA_INIT(//)" speed={35} direction="right" />
         </>
     );
 };

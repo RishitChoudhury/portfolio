@@ -238,8 +238,26 @@
     margin-bottom: 0.5rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .contact-modal-overlay {
+        padding: 0.5rem;
+    }
+
     .contact-console {
-        padding: 2rem;
+        padding: 2rem 1.5rem;
+    }
+
+    .console-header {
+        font-size: 1.25rem;
+    }
+
+    .console-input {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    .console-submit-btn {
+        padding: 1rem;
+        font-size: 1rem;
     }
 }

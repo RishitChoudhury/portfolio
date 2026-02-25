@@ -1,12 +1,12 @@
 /* Capabilities.css - Redesigned Brutalist Modular */
 .capabilities-section {
-    padding: var(--section-padding);
+    padding: rem var(--section-padding-x) var(--section-padding-y) var(--section-padding-x);
     position: relative;
     background-color: var(--bg-color);
 }
 
 .section-header {
-    margin-bottom: 6rem;
+    margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -138,5 +138,28 @@
 @media (max-width: 600px) {
     .capabilities-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .capabilities-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .section-header .headline {
+        font-size: clamp(3rem, 10vw, 5rem);
+    }
+
+    .cap-card {
+        padding: 2rem 1.5rem;
+        min-height: auto;
+    }
+
+    .cap-card-header {
+        margin-bottom: 2rem;
+    }
+
+    .cap-title {
+        font-size: 2rem;
     }
 }
