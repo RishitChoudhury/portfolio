@@ -28,7 +28,7 @@ const projects = [
         metric: '100%',
         metricLabel: 'Type-Safe Architecture',
         buttonText: 'VIEW_PLATFORM',
-        link: 'https://github.com/RishitChoudhury/shaping-hearts.git'
+        link: 'https://shapinghearts-virtualbox.tailc463e6.ts.net'
     }
 ];
 
