@@ -1,0 +1,136 @@
+/* SystematicApproach.css - Horizontal Refactor */
+.systematic-section {
+    padding: var(--section-padding);
+    background-color: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.horizontal-timeline {
+    position: relative;
+    margin-top: 6rem;
+    padding-top: 2rem;
+}
+
+.timeline-track-line {
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.node-marker {
+    width: 20px;
+    height: 20px;
+    background: var(--bg-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.timeline-node:hover .node-marker {
+    transform: scale(1.3);
+    background: var(--primary-color);
+}
+
+.node-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.timeline-node:hover .node-dot {
+    background: var(--bg-color);
+}
+
+.node-content {
+    border-left: 1px solid var(--border-color);
+    padding-left: 1.5rem;
+    min-height: 200px;
+}
+
+.node-num {
+    font-size: 5rem;
+    color: var(--secondary-color);
+    -webkit-text-stroke: 1px var(--border-color);
+    line-height: 0.8;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.timeline-node:hover .node-num {
+    color: var(--primary-color);
+    -webkit-text-stroke: 1px var(--primary-color);
+    text-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+}
+
+.node-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.node-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-family: var(--font-body);
+}
+
+@media (max-width: 1024px) {
+    .timeline-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4rem 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .horizontal-timeline {
+        margin-top: 3rem;
+    }
+
+    .timeline-track-line {
+        top: 0;
+        left: 9px;
+        width: 2px;
+        height: 100%;
+    }
+
+    .timeline-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .timeline-node {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .node-marker {
+        margin-bottom: 0;
+    }
+}

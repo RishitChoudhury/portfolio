@@ -1,0 +1,245 @@
+.contact-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.contact-console {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--primary-color);
+    padding: 3rem;
+    box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
+    z-index: 10;
+    color: var(--primary-color);
+}
+
+.console-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: transparent;
+    color: var(--primary-color);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+}
+
+.console-close:hover {
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.8);
+}
+
+/* Decorative Engine Reticles */
+.console-reticle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: var(--primary-color);
+    border-style: solid;
+}
+
+.console-reticle.top-left {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px;
+}
+
+.console-reticle.top-right {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0;
+}
+
+.console-reticle.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 2px 2px;
+}
+
+.console-reticle.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0;
+}
+
+.console-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-color);
+    padding: 0 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    font-weight: bold;
+}
+
+.console-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+
+.caret-pulse {
+    animation: pulse 1s infinite step-end;
+}
+
+.block-caret {
+    display: inline-block;
+    width: 12px;
+    height: 20px;
+    background-color: var(--primary-color);
+    margin-top: 1rem;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.console-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.input-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+}
+
+.console-input {
+    background: transparent;
+    border: 1px solid rgba(255, 0, 60, 0.5);
+    color: var(--primary-color);
+    padding: 1rem;
+    font-size: 1.1rem;
+    outline: none;
+    border-radius: 0;
+    transition: all 0.3s;
+}
+
+.console-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.3);
+}
+
+.console-input::placeholder {
+    color: rgba(255, 0, 60, 0.3);
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-input {
+    width: 100%;
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--bg-color);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8rem;
+}
+
+.textarea-input {
+    resize: none;
+}
+
+.console-submit-btn {
+    margin-top: 1.5rem;
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.console-submit-btn:hover {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
+}
+
+/* Terminal State */
+.terminal-loading-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 400px;
+    padding: 1rem;
+}
+
+.loading-header {
+    font-size: 1.25rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+}
+
+.loading-sequence {
+    font-size: 1.1rem;
+    line-height: 2;
+    letter-spacing: 0.05em;
+}
+
+.loading-line {
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .contact-console {
+        padding: 2rem;
+    }
+}

@@ -1,0 +1,102 @@
+/* TechStack.css */
+.tech-stack-section {
+    padding: var(--section-padding);
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 50% 100%, rgba(255, 0, 60, 0.05), transparent 50%);
+}
+
+.terminal-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: rgba(17, 17, 17, 0.8);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.term-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.term-dot.red {
+    background-color: #ff5f56;
+}
+
+.term-dot.yellow {
+    background-color: #ffbd2e;
+}
+
+.term-dot.green {
+    background-color: #27c93f;
+}
+
+.term-title {
+    margin-left: 1rem;
+    color: var(--text-muted);
+}
+
+.terminal-body {
+    padding: 3rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.stack-block {
+    margin-bottom: 3.5rem;
+}
+
+.stack-category {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.stack-category .prompt {
+    color: var(--primary-color);
+    margin-right: 0.75rem;
+}
+
+.stack-items.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding-left: 1.5rem;
+}
+
+.stack-item {
+    color: var(--text-primary);
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+    cursor: crosshair;
+}
+
+.stack-item:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+}
+
+.terminal-cursor {
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .terminal-body {
+        padding: 1.5rem;
+    }
+
+    .stack-items.grid {
+        grid-template-columns: 1fr;
+    }
+}
