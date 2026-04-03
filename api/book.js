@@ -39,7 +39,10 @@ export default async function handler(req, res) {
                 start: { dateTime: meetStart.toISOString() },
                 end: { dateTime: meetEnd.toISOString() },
                 conferenceData: {
-                    createRequest: { requestId: `nueva-sync-${Date.now()}` } // Auto-generates Meet link
+                    createRequest: { 
+                        requestId: `nueva-sync-${Date.now()}`,
+                        conferenceSolutionKey: { type: "hangoutsMeet" }
+                    }
                 }
             };
 
