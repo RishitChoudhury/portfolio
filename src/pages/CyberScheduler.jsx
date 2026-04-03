@@ -93,40 +93,38 @@ function CyberScheduler() {
         const startDate = startOfWeek(monthStart);
         const endDate = endOfWeek(monthEnd);
 
-        const rows = [];
         let days = [];
         let day = startDate;
         let formattedDate = '';
 
         while (day <= endDate) {
-            for (let i = 0; i < 7; i++) {
-                formattedDate = format(day, 'd');
-                const cloneDay = day;
-                
-                const isPast = isBefore(startOfDay(cloneDay), startOfDay(new Date()));
-                const isWeekend = getDay(cloneDay) === 0 || getDay(cloneDay) === 6;
-                const isDisabled = !isSameMonth(day, monthStart) || isPast || isWeekend;
-                const isSelected = selectedDate && isSameDay(day, selectedDate);
+            formattedDate = format(day, 'd');
+            const cloneDay = day;
+            
+            const isPast = isBefore(startOfDay(cloneDay), startOfDay(new Date()));
+            const isWeekend = getDay(cloneDay) === 0 || getDay(cloneDay) === 6;
+            const isDisabled = !isSameMonth(day, monthStart) || isPast || isWeekend;
+            const isSelected = selectedDate && isSameDay(day, selectedDate);
 
-                days.push(
-                    <div
-                        className={`calendar-day ${!isSameMonth(day, monthStart) ? 'empty' : ''} ${isSelected ? 'selected' : ''} ${isDisabled && isSameMonth(day, monthStart) ? 'disabled' : ''}`}
-                        key={day}
-                        onClick={() => !isDisabled ? onDateClick(cloneDay) : null}
-                    >
-                        {isSameMonth(day, monthStart) ? formattedDate : ''}
-                    </div>
-                );
-                day = addDays(day, 1);
-            }
-            rows.push(
-                <div className="calendar-grid" key={day}>
-                    {days}
+            days.push(
+                <div
+                    className={`calendar-day ${!isSameMonth(day, monthStart) ? 'empty' : ''} ${isSelected ? 'selected' : ''} ${isDisabled && isSameMonth(day, monthStart) ? 'disabled' : ''}`}
+                    key={day}
+                    onClick={() => !isDisabled ? onDateClick(cloneDay) : null}
+                >
+                    {isSameMonth(day, monthStart) ? formattedDate : ''}
                 </div>
             );
-            days = [];
+            day = addDays(day, 1);
         }
-        return <div className="calendar-body">{rows}</div>;
+        
+        return (
+            <div className="calendar-body">
+                <div className="calendar-grid">
+                    {days}
+                </div>
+            </div>
+        );
     };
 
     const handleConfirmBooking = async () => {
@@ -189,7 +187,7 @@ function CyberScheduler() {
                         {selectedDate && (
                             <div className="time-section">
                                 <div className="time-slot-header">
-                                    > {format(selectedDate, 'MMMM d, yyyy').toUpperCase()}
+                                    &gt; {format(selectedDate, 'MMMM d, yyyy').toUpperCase()}
                                 </div>
                                 <div className="time-slots">
                                     {availableSlots.length > 0 && availableSlots[0] === 'Loading...' ? (
@@ -243,7 +241,7 @@ function CyberScheduler() {
                         </div>
 
                         <div className="form-group">
-                            <label className="mono input-label">> IDENTITY VERIFICATION (EMAIL) // </label>
+                            <label className="mono input-label">&gt; IDENTITY VERIFICATION (EMAIL) // </label>
                             <input 
                                 type="email" 
                                 className="console-input mono" 
@@ -279,8 +277,8 @@ function CyberScheduler() {
                             <>
                                 <h2 className="loading-header mono" style={{ color: '#00ff88' }}>[UPLINK SECURED]</h2>
                                 <div className="loading-sequence mono">
-                                    <div className="loading-line" style={{ color: '#00ff88' }}>> GOOGLE MEET INVITATION DISPATCHED</div>
-                                    <div className="loading-line" style={{ color: '#00ff88', marginTop: '8px' }}>> CHECK INBOX FOR CALENDAR EVENT</div>
+                                    <div className="loading-line" style={{ color: '#00ff88' }}>&gt; GOOGLE MEET INVITATION DISPATCHED</div>
+                                    <div className="loading-line" style={{ color: '#00ff88', marginTop: '8px' }}>&gt; CHECK INBOX FOR CALENDAR EVENT</div>
                                     <div className="loading-line" style={{ color: '#555', marginTop: '24px' }}>// Ending connection...</div>
                                 </div>
                                 <button className="console-submit-btn mono" style={{marginTop:'3rem'}} onClick={() => window.location.href='/'}>
@@ -293,8 +291,8 @@ function CyberScheduler() {
                             <>
                                 <h2 className="loading-header mono" style={{ color: '#ff4444' }}>[UPLINK FAILED]</h2>
                                 <div className="loading-sequence mono">
-                                    <div className="loading-line" style={{ color: '#ff4444' }}>> ERROR: {errorMessage}</div>
-                                    <div className="loading-line" style={{ color: '#888', marginTop: '8px' }}>> SYNC REJECTED. MANUAL SCHEDULING REQUIRED.</div>
+                                    <div className="loading-line" style={{ color: '#ff4444' }}>&gt; ERROR: {errorMessage}</div>
+                                    <div className="loading-line" style={{ color: '#888', marginTop: '8px' }}>&gt; SYNC REJECTED. MANUAL SCHEDULING REQUIRED.</div>
                                 </div>
                                 <div className="action-buttons">
                                     <button className="btn-secondary" onClick={() => setStep(1)}>RETRY</button>

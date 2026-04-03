@@ -118,6 +118,7 @@
     border: 1px solid transparent;
     cursor: pointer;
     transition: all 0.2s;
+    min-width: 0;
 }
 
 .calendar-day:not(.empty):not(.disabled):hover {
