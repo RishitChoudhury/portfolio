@@ -38,7 +38,6 @@ export default async function handler(req, res) {
                 description: `SYSTEM CLIENT: ${email}\nPROJECT TYPE: ${projectType}\nDESCRIPTION:\n${description}`,
                 start: { dateTime: meetStart.toISOString() },
                 end: { dateTime: meetEnd.toISOString() },
-                attendees: [{ email }, { email: process.env.GMAIL_USER }],
                 conferenceData: {
                     createRequest: { requestId: `nueva-sync-${Date.now()}` } // Auto-generates Meet link
                 }
@@ -47,8 +46,7 @@ export default async function handler(req, res) {
             const createdEvent = await calendar.events.insert({
                 calendarId: process.env.GMAIL_USER,
                 resource: event,
-                conferenceDataVersion: 1,
-                sendUpdates: 'all' // Google auto-sends an invite to attendees
+                conferenceDataVersion: 1
             });
 
             meetLink = createdEvent.data.hangoutLink || 'Google Meet Link Generated Successfully';
