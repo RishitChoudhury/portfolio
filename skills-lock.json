@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "email-design": {
+      "source": "inferen-sh/skills",
+      "sourceType": "github",
+      "computedHash": "32e4ebb0f91e9aa9c0cf3c5b866a423460f94cab9386194aead0bf2718d4ac3b"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",

@@ -1,18 +1,11 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Components
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Capabilities from './components/Capabilities';
-import FeaturedWork from './components/FeaturedWork';
-import SystematicApproach from './components/SystematicApproach';
-import TechStack from './components/TechStack';
-import Footer from './components/Footer';
-import CyberContactForm from './components/CyberContactForm';
+// Pages
+import Home from './pages/Home';
+import CyberScheduler from './pages/CyberScheduler';
 
 function App() {
-    const [isContactOpen, setIsContactOpen] = React.useState(false);
-
     // Custom Cursor
     useEffect(() => {
         const cursor = document.createElement('div');
@@ -26,25 +19,19 @@ function App() {
         window.addEventListener('mousemove', moveCursor);
         return () => {
             window.removeEventListener('mousemove', moveCursor);
-            cursor.remove();
+            if (document.body.contains(cursor)) {
+                cursor.remove();
+            }
         };
     }, []);
 
     return (
-        <div className="app-container">
-            <Navbar onOpenContact={() => setIsContactOpen(true)} />
-            <Hero />
-            <Capabilities />
-            <FeaturedWork />
-            <SystematicApproach />
-            <TechStack />
-            <Footer onOpenContact={() => setIsContactOpen(true)} />
-
-            <CyberContactForm
-                isOpen={isContactOpen}
-                onClose={() => setIsContactOpen(false)}
-            />
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/schedule" element={<CyberScheduler />} />
+            </Routes>
+        </BrowserRouter>
     )
 }
 

@@ -1,0 +1,119 @@
+export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType = '', description = '', baseUrl = 'http://localhost:3000') => {
+    // Extract a name from the email (e.g., john.doe@example.com -> John Doe)
+    let clientName = clientEmail.split('@')[0];
+    clientName = clientName.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    const params = new URLSearchParams({
+        email: clientEmail,
+        type: projectType,
+        desc: description
+    }).toString();
+    const scheduleLink = `${baseUrl}/schedule?${params}`;
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUEVA | Transmission Received</title>
+    <!--[if !mso]><!-->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!--<![endif]-->
+    <!--[if mso]>
+    <style type="text/css">
+        table {border-collapse:collapse;}
+    </style>
+    <![endif]-->
+</head>
+<body style="margin: 0; padding: 0; background-color: #030303; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; font-size: 16px; line-height: 1.5; color: #ffffff;">
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #030303; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #0a0a0a; border: 1px solid #333333; overflow: hidden; max-width: 600px; width: 100%;">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background-color: #030303; padding: 40px 30px; border-bottom: 2px solid #ff003c;">
+                            <h1 style="color: #ffffff; margin: 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 36px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">
+                                NUEVA
+                            </h1>
+                            <p style="color: #ff003c; margin: 8px 0 0 0; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 3px;">
+                                SYS.COMMS.TERMINAL_V1.0
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px 40px;">
+                            <h2 style="margin: 0 0 20px 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 24px; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; font-weight: normal;">
+                                EXPLORING YOUR PROJECT GOALS
+                            </h2>
+                            
+                            <p style="margin: 0 0 16px 0; color: #cccccc;">Dear ${clientName},</p>
+                            
+                            <p style="margin: 0 0 16px 0; color: #cccccc;">Thank you for reaching out to NUEVA. We have received your inquiry and appreciate you taking the time to get in touch with us.</p>
+                            
+                            <p style="margin: 0 0 24px 0; color: #cccccc;">After reviewing the details you shared, we believe there is a strong opportunity to explore how our digital engineering expertise can support your goals. We would love to schedule a discovery call at your earliest convenience to better understand your project requirements and discuss how we can be of service.</p>
+                            
+                            <p style="margin: 0 0 30px 0; color: #cccccc;">Please feel free to book a time that works best for you using the link below, or simply reply to this email with your availability and we will coordinate accordingly.</p>
+
+                            <!-- CTA Button -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="left">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td align="center" style="border: 2px solid #ff003c; background-color: transparent;">
+                                                    <a href="${scheduleLink}" target="_blank" style="font-size: 14px; font-family: 'JetBrains Mono', 'Courier New', monospace; color: #ff003c; text-decoration: none; padding: 14px 28px; display: inline-block; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
+                                                        [ SCHEDULE UPLINK ]
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin: 30px 0 0 0; color: #888888; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13px;">> In the meantime, should you have any immediate questions, do not hesitate to reach out. We are ready to assist.</p>
+                            <p style="margin: 16px 0 0 0; color: #cccccc;">We look forward to connecting with you soon.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Sign-off / Signature -->
+                    <tr>
+                        <td style="padding: 0 40px 40px 40px;">
+                            <p style="margin: 0 0 8px 0; color: #cccccc;">Warm regards,</p>
+                            <p style="margin: 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 20px; color: #ffffff; letter-spacing: 1px;">THE NUEVA TEAM</p>
+                            <p style="margin: 2px 0 0 0; color: #888888; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px; text-transform: uppercase;">Client Relations / Operations</p>
+                            <p style="margin: 12px 0 0 0; color: #ff003c; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: bold; font-size: 12px; text-transform: uppercase;">NUEVA | Digital Engineering</p>
+                            <p style="margin: 6px 0 0 0; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px;">
+                                <a href="mailto:${senderEmail}" style="color: #ff003c; text-decoration: none;">> ${senderEmail}</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding: 30px 40px; background-color: #050505; border-top: 1px solid #333333;">
+                            <p style="margin: 0 0 8px 0; color: #888888; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 10px; text-transform: uppercase;">
+                                // TRANSMISSION SECURED
+                            </p>
+                            <p style="margin: 0 0 10px 0; color: #555555; font-size: 11px;">
+                                You are receiving this packet because you submitted an inquiry.
+                            </p>
+                            <p style="margin: 0; color: #555555; font-size: 11px;">
+                                &copy; ${new Date().getFullYear()} NUEVA Digital Engineering. All protocols reserved.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`;
+};
