@@ -49,7 +49,7 @@ export default async function handler(req, res) {
                 conferenceDataVersion: 1
             });
 
-            meetLink = createdEvent.data.hangoutLink || 'Google Meet Link Generated Successfully';
+            meetLink = createdEvent.data.hangoutLink || createdEvent.data.htmlLink || 'https://calendar.google.com';
         }
 
         // Send Custom branded email confirmation using Nodemailer
