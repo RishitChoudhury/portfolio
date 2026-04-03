@@ -35,7 +35,7 @@ export default async function handler(req, res) {
                 description: `SYSTEM CLIENT: ${email}\nPROJECT TYPE: ${projectType}\nDESCRIPTION:\n${description}`,
                 start: { dateTime: meetStart.toISOString() },
                 end: { dateTime: meetEnd.toISOString() },
-                attendees: [{ email }],
+                attendees: [{ email }, { email: process.env.GMAIL_USER }],
                 conferenceData: {
                     createRequest: { requestId: `nueva-sync-${Date.now()}` } // Auto-generates Meet link
                 }
