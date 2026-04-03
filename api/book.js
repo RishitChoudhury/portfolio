@@ -20,14 +20,17 @@ export default async function handler(req, res) {
 
         // Check for Google Auth payload
         if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-            const auth = new google.auth.JWT(
-                process.env.GOOGLE_CLIENT_EMAIL,
-                null,
-                process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-                ['https://www.googleapis.com/auth/calendar']
-            );
+            const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n').replace(/^"|"$/g, '');
+            const auth = new google.auth.GoogleAuth({
+                credentials: {
+                    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                    private_key: rawPrivateKey,
+                },
+                scopes: ['https://www.googleapis.com/auth/calendar']
+            });
 
-            const calendar = google.calendar({ version: 'v3', auth });
+            const authClient = await auth.getClient();
+            const calendar = google.calendar({ version: 'v3', auth: authClient });
 
             // Create Event
             const event = {
@@ -42,7 +45,7 @@ export default async function handler(req, res) {
             };
 
             const createdEvent = await calendar.events.insert({
-                calendarId: 'primary',
+                calendarId: process.env.GMAIL_USER,
                 resource: event,
                 conferenceDataVersion: 1,
                 sendUpdates: 'all' // Google auto-sends an invite to attendees
