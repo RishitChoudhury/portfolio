@@ -16,7 +16,10 @@ export default async function handler(req, res) {
         const meetStart = parse(`${date} ${time}`, 'yyyy-MM-dd h:mm a', new Date());
         const meetEnd = addHours(meetStart, 1); // 1 hr meeting
 
-        let meetLink = 'Pending Generator API...';
+        // Use a permanent Google Meet room link if set, otherwise fallback
+        const meetLink = process.env.GOOGLE_MEET_LINK || 'https://calendar.google.com';
+
+        let calendarEventLink = meetLink;
 
         // Check for Google Auth payload
         if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
@@ -32,45 +35,41 @@ export default async function handler(req, res) {
             const authClient = await auth.getClient();
             const calendar = google.calendar({ version: 'v3', auth: authClient });
 
-            // Create Event payload
-            const baseEvent = {
-                summary: `Discovery Call: NUEVA / ${projectType}`,
-                description: `SYSTEM CLIENT: ${email}\nPROJECT TYPE: ${projectType}\nDESCRIPTION:\n${description}`,
+            // Build event — no attendees or conferenceData (not supported for
+            // service accounts on personal Gmail).  The Meet link is embedded
+            // in the description so both parties can join.
+            const event = {
+                summary: `Discovery Call: NUEVA × ${projectType || 'General'}`,
+                description: [
+                    `CLIENT: ${email}`,
+                    `PROJECT TYPE: ${projectType || 'General'}`,
+                    `DESCRIPTION:\n${description || 'N/A'}`,
+                    ``,
+                    `───────────────────`,
+                    `JOIN MEETING: ${meetLink}`,
+                    `───────────────────`,
+                ].join('\n'),
                 start: { dateTime: meetStart.toISOString() },
                 end: { dateTime: meetEnd.toISOString() },
-                attendees: [{ email }],
+                reminders: {
+                    useDefault: false,
+                    overrides: [
+                        { method: 'popup', minutes: 30 },
+                        { method: 'popup', minutes: 10 },
+                    ],
+                },
+                // Mark as busy to block the slot
+                transparency: 'opaque',
+                status: 'confirmed',
             };
 
-            let createdEvent;
+            const createdEvent = await calendar.events.insert({
+                calendarId: process.env.GMAIL_USER,
+                resource: event,
+            });
 
-            // Attempt 1: Try with Google Meet conferenceData
-            try {
-                const eventWithMeet = {
-                    ...baseEvent,
-                    conferenceData: {
-                        createRequest: {
-                            requestId: `nueva-sync-${Date.now()}`,
-                            conferenceSolutionKey: { type: 'hangoutsMeet' }
-                        }
-                    }
-                };
-                createdEvent = await calendar.events.insert({
-                    calendarId: process.env.GMAIL_USER,
-                    resource: eventWithMeet,
-                    conferenceDataVersion: 1,
-                    sendUpdates: 'all'
-                });
-            } catch (meetErr) {
-                console.warn('Meet link generation failed (expected for personal Gmail), creating plain event:', meetErr.message);
-                // Attempt 2: Create event without Meet — still books the calendar slot
-                createdEvent = await calendar.events.insert({
-                    calendarId: process.env.GMAIL_USER,
-                    resource: baseEvent,
-                    sendUpdates: 'all'
-                });
-            }
-
-            meetLink = createdEvent.data.hangoutLink || createdEvent.data.htmlLink || 'https://calendar.google.com';
+            calendarEventLink = createdEvent.data.htmlLink || meetLink;
+            console.log('Calendar event created:', createdEvent.data.id);
         }
 
         // Send Custom branded email confirmation using Nodemailer
@@ -90,7 +89,7 @@ export default async function handler(req, res) {
                 <h1 style="color: #ff003c; margin: 0 0 20px 0; font-family: Impact, sans-serif; letter-spacing: 2px;">
                     UPLINK CONFIRMED
                 </h1>
-                <p style="color: #888; font-size: 14px;">> DISCOVERY CALL SYNC SUCCESSFUL</p>
+                <p style="color: #888; font-size: 14px;">&gt; DISCOVERY CALL SYNC SUCCESSFUL</p>
                 <hr style="border-color: #333; margin: 20px 0;">
                 
                 <table style="width: 100%; text-align: left; border-collapse: collapse;">
@@ -104,13 +103,18 @@ export default async function handler(req, res) {
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #888;">TYPE //</td>
-                        <td style="color: #fff;">${projectType}</td>
+                        <td style="color: #fff;">${projectType || 'General'}</td>
                     </tr>
                 </table>
 
                 <div style="margin-top: 30px;">
-                    <a href="${meetLink}" style="background: #ff003c; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block;">
+                    <a href="${meetLink}" style="background: #ff003c; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; letter-spacing: 1px;">
                         JOIN GOOGLE MEET
+                    </a>
+                </div>
+                <div style="margin-top: 12px;">
+                    <a href="${calendarEventLink}" style="color: #ff003c; font-size: 12px; text-decoration: underline;">
+                        View Calendar Event
                     </a>
                 </div>
             </div>
@@ -125,7 +129,7 @@ export default async function handler(req, res) {
             html: confirmHtml
         });
 
-        res.status(200).json({ success: true, meetLink });
+        res.status(200).json({ success: true, meetLink, calendarEventLink });
 
     } catch (err) {
         console.error('Booking Error:', err);
