@@ -2,6 +2,22 @@ import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import { parse, addHours } from 'date-fns';
 
+/**
+ * Creates an OAuth2 client using stored refresh token.
+ * This allows the API to act AS the user — required for
+ * Google Meet link generation on personal Gmail accounts.
+ */
+function getOAuth2Client() {
+    const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_OAUTH_CLIENT_ID,
+        process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    );
+    oauth2Client.setCredentials({
+        refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN,
+    });
+    return oauth2Client;
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -16,63 +32,79 @@ export default async function handler(req, res) {
         const meetStart = parse(`${date} ${time}`, 'yyyy-MM-dd h:mm a', new Date());
         const meetEnd = addHours(meetStart, 1); // 1 hr meeting
 
-        // Use a permanent Google Meet room link if set, otherwise fallback
-        const meetLink = process.env.GOOGLE_MEET_LINK || 'https://calendar.google.com';
+        let meetLink = '';
+        let calendarEventLink = '';
 
-        let calendarEventLink = meetLink;
+        // ---------- GOOGLE CALENDAR EVENT + MEET LINK ----------
+        const hasOAuth = process.env.GOOGLE_OAUTH_CLIENT_ID
+            && process.env.GOOGLE_OAUTH_CLIENT_SECRET
+            && process.env.GOOGLE_OAUTH_REFRESH_TOKEN;
 
-        // Check for Google Auth payload
-        if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-            const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n').replace(/^"|"$/g, '');
-            const auth = new google.auth.GoogleAuth({
-                credentials: {
-                    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-                    private_key: rawPrivateKey,
-                },
-                scopes: ['https://www.googleapis.com/auth/calendar']
-            });
+        if (hasOAuth) {
+            const auth = getOAuth2Client();
+            const calendar = google.calendar({ version: 'v3', auth });
 
-            const authClient = await auth.getClient();
-            const calendar = google.calendar({ version: 'v3', auth: authClient });
+            const projectLabel = projectType || 'General Inquiry';
 
-            // Build event — no attendees or conferenceData (not supported for
-            // service accounts on personal Gmail).  The Meet link is embedded
-            // in the description so both parties can join.
             const event = {
-                summary: `Discovery Call: NUEVA × ${projectType || 'General'}`,
+                summary: `NUEVA × ${projectLabel} — Discovery Call`,
                 description: [
-                    `CLIENT: ${email}`,
-                    `PROJECT TYPE: ${projectType || 'General'}`,
-                    `DESCRIPTION:\n${description || 'N/A'}`,
+                    `━━━ NUEVA DIGITAL ENGINEERING ━━━`,
                     ``,
-                    `───────────────────`,
-                    `JOIN MEETING: ${meetLink}`,
-                    `───────────────────`,
+                    `Client: ${email}`,
+                    `Project Type: ${projectLabel}`,
+                    ``,
+                    `Brief:`,
+                    `${description || 'To be discussed on the call.'}`,
+                    ``,
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                    `This meeting was auto-scheduled via nuevadigital.in`,
                 ].join('\n'),
-                start: { dateTime: meetStart.toISOString() },
-                end: { dateTime: meetEnd.toISOString() },
+                start: {
+                    dateTime: meetStart.toISOString(),
+                    timeZone: 'Asia/Kolkata',
+                },
+                end: {
+                    dateTime: meetEnd.toISOString(),
+                    timeZone: 'Asia/Kolkata',
+                },
+                attendees: [
+                    { email: email },
+                ],
+                conferenceData: {
+                    createRequest: {
+                        requestId: `nueva-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                        conferenceSolutionKey: { type: 'hangoutsMeet' },
+                    },
+                },
                 reminders: {
                     useDefault: false,
                     overrides: [
                         { method: 'popup', minutes: 30 },
-                        { method: 'popup', minutes: 10 },
+                        { method: 'email', minutes: 60 },
                     ],
                 },
-                // Mark as busy to block the slot
-                transparency: 'opaque',
+                transparency: 'opaque',   // Blocks the calendar slot
                 status: 'confirmed',
             };
 
             const createdEvent = await calendar.events.insert({
-                calendarId: process.env.GMAIL_USER,
+                calendarId: 'primary',
                 resource: event,
+                conferenceDataVersion: 1,
+                sendUpdates: 'all',        // Sends invite to attendee
             });
 
-            calendarEventLink = createdEvent.data.htmlLink || meetLink;
-            console.log('Calendar event created:', createdEvent.data.id);
+            meetLink = createdEvent.data.hangoutLink || '';
+            calendarEventLink = createdEvent.data.htmlLink || '';
+
+            console.log('✅ Calendar event created:', createdEvent.data.id);
+            console.log('   Meet link:', meetLink);
+        } else {
+            console.warn('⚠️  OAuth2 credentials not configured — skipping calendar creation.');
         }
 
-        // Send Custom branded email confirmation using Nodemailer
+        // ---------- CONFIRMATION EMAIL ----------
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -82,6 +114,14 @@ export default async function handler(req, res) {
                 pass: process.env.GMAIL_APP_PASSWORD,
             },
         });
+
+        const meetButtonHtml = meetLink
+            ? `<a href="${meetLink}" style="background: #ff003c; color: #fff; padding: 14px 28px; text-decoration: none; font-weight: bold; display: inline-block; letter-spacing: 1px; font-size: 14px;">JOIN GOOGLE MEET</a>`
+            : `<span style="color: #888; font-size: 13px;">Google Meet link will be shared separately.</span>`;
+
+        const calendarLinkHtml = calendarEventLink
+            ? `<a href="${calendarEventLink}" style="color: #ff003c; font-size: 12px; text-decoration: underline; display: inline-block; margin-top: 12px;">View Calendar Event →</a>`
+            : '';
 
         const confirmHtml = `
         <div style="font-family: 'Courier New', monospace; background: #030303; color: #ffffff; padding: 40px;">
@@ -99,34 +139,28 @@ export default async function handler(req, res) {
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #888;">TIME //</td>
-                        <td style="color: #fff;">${time}</td>
+                        <td style="color: #fff;">${time} IST</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #888;">TYPE //</td>
-                        <td style="color: #fff;">${projectType || 'General'}</td>
+                        <td style="color: #fff;">${projectType || 'General Inquiry'}</td>
                     </tr>
                 </table>
 
                 <div style="margin-top: 30px;">
-                    <a href="${meetLink}" style="background: #ff003c; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; letter-spacing: 1px;">
-                        JOIN GOOGLE MEET
-                    </a>
+                    ${meetButtonHtml}
                 </div>
-                <div style="margin-top: 12px;">
-                    <a href="${calendarEventLink}" style="color: #ff003c; font-size: 12px; text-decoration: underline;">
-                        View Calendar Event
-                    </a>
-                </div>
+                ${calendarLinkHtml}
             </div>
         </div>
         `;
 
         await transporter.sendMail({
             from: `"NUEVA | Digital Engineering" <${process.env.GMAIL_USER}>`,
-            to: email, // Send to the client
-            bcc: process.env.GMAIL_USER, // Admin copy
-            subject: `Calendar Sync Confirmed: Meeting with NUEVA`,
-            html: confirmHtml
+            to: email,
+            bcc: process.env.GMAIL_USER,
+            subject: `NUEVA × ${projectType || 'Discovery Call'} — Meeting Confirmed`,
+            html: confirmHtml,
         });
 
         res.status(200).json({ success: true, meetLink, calendarEventLink });
