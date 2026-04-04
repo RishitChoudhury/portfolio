@@ -32,25 +32,43 @@ export default async function handler(req, res) {
             const authClient = await auth.getClient();
             const calendar = google.calendar({ version: 'v3', auth: authClient });
 
-            // Create Event
-            const event = {
+            // Create Event payload
+            const baseEvent = {
                 summary: `Discovery Call: NUEVA / ${projectType}`,
                 description: `SYSTEM CLIENT: ${email}\nPROJECT TYPE: ${projectType}\nDESCRIPTION:\n${description}`,
                 start: { dateTime: meetStart.toISOString() },
                 end: { dateTime: meetEnd.toISOString() },
-                conferenceData: {
-                    createRequest: { 
-                        requestId: `nueva-sync-${Date.now()}`,
-                        conferenceSolutionKey: { type: "hangoutsMeet" }
-                    }
-                }
+                attendees: [{ email }],
             };
 
-            const createdEvent = await calendar.events.insert({
-                calendarId: process.env.GMAIL_USER,
-                resource: event,
-                conferenceDataVersion: 1
-            });
+            let createdEvent;
+
+            // Attempt 1: Try with Google Meet conferenceData
+            try {
+                const eventWithMeet = {
+                    ...baseEvent,
+                    conferenceData: {
+                        createRequest: {
+                            requestId: `nueva-sync-${Date.now()}`,
+                            conferenceSolutionKey: { type: 'hangoutsMeet' }
+                        }
+                    }
+                };
+                createdEvent = await calendar.events.insert({
+                    calendarId: process.env.GMAIL_USER,
+                    resource: eventWithMeet,
+                    conferenceDataVersion: 1,
+                    sendUpdates: 'all'
+                });
+            } catch (meetErr) {
+                console.warn('Meet link generation failed (expected for personal Gmail), creating plain event:', meetErr.message);
+                // Attempt 2: Create event without Meet — still books the calendar slot
+                createdEvent = await calendar.events.insert({
+                    calendarId: process.env.GMAIL_USER,
+                    resource: baseEvent,
+                    sendUpdates: 'all'
+                });
+            }
 
             meetLink = createdEvent.data.hangoutLink || createdEvent.data.htmlLink || 'https://calendar.google.com';
         }
