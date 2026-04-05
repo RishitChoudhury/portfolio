@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Pages
 import Home from './pages/Home';
 import CyberScheduler from './pages/CyberScheduler';
+import CaseStudyShapingHearts from './pages/CaseStudyShapingHearts';
 
 function App() {
     // Custom Cursor
@@ -30,6 +31,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/schedule" element={<CyberScheduler />} />
+                <Route path="/case-study/shaping-hearts" element={<CaseStudyShapingHearts />} />
             </Routes>
         </BrowserRouter>
     )

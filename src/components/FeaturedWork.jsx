@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import './FeaturedWork.css';
 
 const projects = [
@@ -11,7 +12,7 @@ const projects = [
         wins: ['Instant certificate verification & download', 'Deployed high-performance global web presence', 'Automated repetitive data handling'],
         metric: '100%',
         metricLabel: 'Manual Labor Reduction',
-        buttonText: 'VIEW_CASE_STUDY',
+        buttonText: 'VIEW_PLATFORM',
         link: 'https://www.thesankalp.org',
         videoUrl: 'https://leefalk9yd9m859v.public.blob.vercel-storage.com/sankalp.mp4'
     },
@@ -27,8 +28,9 @@ const projects = [
         ],
         metric: '100%',
         metricLabel: 'Type-Safe Architecture',
-        buttonText: 'VIEW_PLATFORM',
-        link: 'https://shapinghearts-virtualbox.tailc463e6.ts.net'
+        buttonText: 'VIEW_CASE_STUDY',
+        link: '/case-study/shaping-hearts',
+        isInternal: true
     }
 ];
 
@@ -104,9 +106,15 @@ const ProjectCard = ({ project }) => {
                 </div>
 
                 {project.link ? (
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn-outline mono project-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}>
-                        {project.buttonText || 'VIEW_ARCHITECTURE'}
-                    </a>
+                    project.isInternal ? (
+                        <Link to={project.link} className="btn-outline mono project-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}>
+                            {project.buttonText || 'VIEW_ARCHITECTURE'}
+                        </Link>
+                    ) : (
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn-outline mono project-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}>
+                            {project.buttonText || 'VIEW_ARCHITECTURE'}
+                        </a>
+                    )
                 ) : (
                     <button className="btn-outline mono project-btn">{project.buttonText || 'VIEW_ARCHITECTURE'}</button>
                 )}
