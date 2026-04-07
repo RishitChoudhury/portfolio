@@ -24,7 +24,7 @@ const TechStack = () => {
                         <span className="term-dot red"></span>
                         <span className="term-dot yellow"></span>
                         <span className="term-dot green"></span>
-                        <span className="term-title">nueva@systema: ~/stack.config</span>
+                        <span className="term-title">local@syntaxt: ~/stack.config</span>
                     </div>
 
                     <div className="terminal-body mono">

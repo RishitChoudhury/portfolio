@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import './CaseStudyShapingHearts.css';
 
 const CaseStudyShapingHearts = () => {
@@ -10,6 +11,11 @@ const CaseStudyShapingHearts = () => {
 
     return (
         <div className="case-study-container">
+            <SEO 
+                title="Shaping Hearts Case Study | Syntaxt" 
+                description="How Syntaxt revolutionized event and submission management with next-gen web applications, Next.js, and business automation." 
+                keywords="Shaping Hearts, custom software development for businesses, business automation case study, Next.js architecture" 
+            />
             {/* Navigation / Back Button */}
             <div className="cs-nav">
                 <Link to="/" className="cs-back-btn mono">

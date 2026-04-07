@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, getDay, isBefore, startOfDay } from 'date-fns';
+import SEO from '../components/SEO';
 import './CyberScheduler.css';
 import '../components/CyberContactForm.css';
 
@@ -162,6 +163,11 @@ function CyberScheduler() {
 
     return (
         <div className="scheduler-container">
+            <SEO 
+                title="Schedule a Consultation | Syntaxt" 
+                description="Book a session to discuss custom fullstack development, mobile apps, or business automation solutions." 
+                keywords="schedule consultation, tech agency booking, custom software development for businesses" 
+            />
             <div className="scheduler-console">
                 <button className="console-close mono" onClick={() => window.location.href='/'}>[X] RETURN_TO_BASE</button>
                 <div className="console-reticle top-left"></div>

@@ -34,7 +34,7 @@ const Footer = ({ onOpenContact }) => {
 
                 <div className="footer-bottom-grid">
                     <div className="footer-brand">
-                        <h3 className="headline brand-logo">NUEVA<span className="accent">/</span>SYSTEMS</h3>
+                        <h3 className="headline brand-logo">SYN<span className="accent">TAXT</span></h3>
                         <p className="copyright mono">© 2026 / ALL SYSTEMS NOMINAL</p>
                     </div>
 

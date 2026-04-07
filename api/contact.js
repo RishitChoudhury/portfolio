@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     <div style="font-family: 'Courier New', monospace; background: #0a0a0a; color: #e0e0e0; padding: 32px; border: 1px solid #333;">
         <div style="border-bottom: 1px solid #333; padding-bottom: 16px; margin-bottom: 24px;">
             <h1 style="color: #00ff88; margin: 0; font-size: 18px; letter-spacing: 2px;">
-                ▶ NUEVA/SYSTEMS — NEW TRANSMISSION
+                ▶ SYNTAXT — NEW TRANSMISSION
             </h1>
             <p style="color: #666; margin: 8px 0 0 0; font-size: 12px;">
                 ${new Date().toISOString()}
@@ -80,10 +80,10 @@ export default async function handler(req, res) {
 
     try {
         await transporter.sendMail({
-            from: `"Nueva Systems Portfolio" <${process.env.GMAIL_USER}>`,
+            from: `"Syntaxt Systems Portfolio" <${process.env.GMAIL_USER}>`,
             to: process.env.GMAIL_USER,
             replyTo: email,
-            subject: `[NUEVA/SYS] New ${projectType} inquiry from ${email}`,
+            subject: `[SYNTAXT] New ${projectType} inquiry from ${email}`,
             html: htmlBody,
         });
 
@@ -93,9 +93,9 @@ export default async function handler(req, res) {
 
         // Send auto-reply to the client
         await transporter.sendMail({
-            from: `"NUEVA | Digital Engineering" <${process.env.GMAIL_USER}>`,
+            from: `"Syntaxt" <${process.env.GMAIL_USER}>`,
             to: email,
-            subject: `Your Inquiry to NUEVA | Let's Connect`,
+            subject: `Your Inquiry to Syntaxt | Let's Connect`,
             html: getAutoReplyEmailTemplate(email, process.env.GMAIL_USER, projectType, description, baseUrl)
         });
 

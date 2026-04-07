@@ -22,7 +22,7 @@ const Navbar = ({ onOpenContact }) => {
         >
             <div className="navbar-container">
                 <div className="nav-brand">
-                    <span className="headline">NUEVA<span className="accent">/</span>SYSTEMA</span>
+                    <span className="headline">SYN<span className="accent">TAXT</span></span>
                 </div>
 
                 <div className="nav-links mono">

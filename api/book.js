@@ -47,9 +47,9 @@ export default async function handler(req, res) {
             const projectLabel = projectType || 'General Inquiry';
 
             const event = {
-                summary: `NUEVA × ${projectLabel} — Discovery Call`,
+                summary: `Syntaxt × ${projectLabel} — Discovery Call`,
                 description: [
-                    `━━━ NUEVA DIGITAL ENGINEERING ━━━`,
+                    `━━━ Syntaxt ━━━`,
                     ``,
                     `Client: ${email}`,
                     `Project Type: ${projectLabel}`,
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
                     `${description || 'To be discussed on the call.'}`,
                     ``,
                     `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-                    `This meeting was auto-scheduled via nuevadigital.in`,
+                    `This meeting was auto-scheduled via syntaxt.dev`,
                 ].join('\n'),
                 start: {
                     dateTime: meetStart.toISOString(),
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
                 ],
                 conferenceData: {
                     createRequest: {
-                        requestId: `nueva-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                        requestId: `syntaxt-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
                         conferenceSolutionKey: { type: 'hangoutsMeet' },
                     },
                 },
@@ -156,10 +156,10 @@ export default async function handler(req, res) {
         `;
 
         await transporter.sendMail({
-            from: `"NUEVA | Digital Engineering" <${process.env.GMAIL_USER}>`,
+            from: `"Syntaxt" <${process.env.GMAIL_USER}>`,
             to: email,
             bcc: process.env.GMAIL_USER,
-            subject: `NUEVA × ${projectType || 'Discovery Call'} — Meeting Confirmed`,
+            subject: `Syntaxt × ${projectType || 'Discovery Call'} — Meeting Confirmed`,
             html: confirmHtml,
         });
 

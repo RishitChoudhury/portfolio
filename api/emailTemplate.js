@@ -15,7 +15,7 @@ export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUEVA | Transmission Received</title>
+    <title>Syntaxt | Transmission Received</title>
     <!--[if !mso]><!-->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <!--<![endif]-->
@@ -37,7 +37,7 @@ export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType 
                     <tr>
                         <td align="center" style="background-color: #030303; padding: 40px 30px; border-bottom: 2px solid #ff003c;">
                             <h1 style="color: #ffffff; margin: 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 36px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">
-                                NUEVA
+                                Syntaxt
                             </h1>
                             <p style="color: #ff003c; margin: 8px 0 0 0; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 3px;">
                                 SYS.COMMS.TERMINAL_V1.0
@@ -54,9 +54,9 @@ export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType 
                             
                             <p style="margin: 0 0 16px 0; color: #cccccc;">Dear ${clientName},</p>
                             
-                            <p style="margin: 0 0 16px 0; color: #cccccc;">Thank you for reaching out to NUEVA. We have received your inquiry and appreciate you taking the time to get in touch with us.</p>
+                            <p style="margin: 0 0 16px 0; color: #cccccc;">Thank you for reaching out to Syntaxt. We have received your inquiry and appreciate you taking the time to get in touch with us.</p>
                             
-                            <p style="margin: 0 0 24px 0; color: #cccccc;">After reviewing the details you shared, we believe there is a strong opportunity to explore how our digital engineering expertise can support your goals. We would love to schedule a discovery call at your earliest convenience to better understand your project requirements and discuss how we can be of service.</p>
+                            <p style="margin: 0 0 24px 0; color: #cccccc;">After reviewing the details you shared, we believe there is a strong opportunity to explore how our software expertise can support your goals. We would love to schedule a discovery call at your earliest convenience to better understand your project requirements and discuss how we can be of service.</p>
                             
                             <p style="margin: 0 0 30px 0; color: #cccccc;">Please feel free to book a time that works best for you using the link below, or simply reply to this email with your availability and we will coordinate accordingly.</p>
 
@@ -86,9 +86,9 @@ export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType 
                     <tr>
                         <td style="padding: 0 40px 40px 40px;">
                             <p style="margin: 0 0 8px 0; color: #cccccc;">Warm regards,</p>
-                            <p style="margin: 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 20px; color: #ffffff; letter-spacing: 1px;">THE NUEVA TEAM</p>
+                            <p style="margin: 0; font-family: 'Bebas Neue', 'Anton', Impact, sans-serif; font-size: 20px; color: #ffffff; letter-spacing: 1px;">THE SYNTAXT TEAM</p>
                             <p style="margin: 2px 0 0 0; color: #888888; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px; text-transform: uppercase;">Client Relations / Operations</p>
-                            <p style="margin: 12px 0 0 0; color: #ff003c; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: bold; font-size: 12px; text-transform: uppercase;">NUEVA | Digital Engineering</p>
+                            <p style="margin: 12px 0 0 0; color: #ff003c; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: bold; font-size: 12px; text-transform: uppercase;">Syntaxt</p>
                             <p style="margin: 6px 0 0 0; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px;">
                                 <a href="mailto:${senderEmail}" style="color: #ff003c; text-decoration: none;">> ${senderEmail}</a>
                             </p>
@@ -105,7 +105,7 @@ export const getAutoReplyEmailTemplate = (clientEmail, senderEmail, projectType 
                                 You are receiving this packet because you submitted an inquiry.
                             </p>
                             <p style="margin: 0; color: #555555; font-size: 11px;">
-                                &copy; ${new Date().getFullYear()} NUEVA Digital Engineering. All protocols reserved.
+                                &copy; ${new Date().getFullYear()} Syntaxt. All protocols reserved.
                             </p>
                         </td>
                     </tr>
