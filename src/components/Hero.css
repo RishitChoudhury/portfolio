@@ -1,14 +1,14 @@
 /* Hero.css - Redesigned Brutalist */
 .hero-section {
     position: relative;
-    min-height: 95vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     overflow: hidden;
     padding-top: 100px;
     padding-bottom: 6rem;
-    /* Accounts for navbar */
     background: var(--secondary-color);
+    z-index: 1;
 }
 
 /* Scanline Overlay */
