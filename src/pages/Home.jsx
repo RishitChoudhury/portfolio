@@ -11,15 +11,42 @@ import TechStack from '../components/TechStack';
 import Footer from '../components/Footer';
 import CyberContactForm from '../components/CyberContactForm';
 
+const HOME_JSON_LD = [
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Syntaxt",
+        "url": "https://www.syntaxt.dev",
+        "logo": "https://www.syntaxt.dev/og-image.jpg",
+        "description": "Syntaxt builds custom fullstack web apps, mobile apps, and business automation solutions.",
+        "sameAs": [
+            "https://github.com/syntaxt",
+            "https://linkedin.com/company/syntaxt"
+        ]
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Syntaxt",
+        "url": "https://www.syntaxt.dev",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.syntaxt.dev/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+];
+
 function Home() {
     const [isContactOpen, setIsContactOpen] = React.useState(false);
 
     return (
         <div className="app-container">
-            <SEO 
-                title="Syntaxt" 
-                description="Custom fullstack development, mobile apps, and business automation solutions." 
-                keywords="custom fullstack development, business automation solutions, mobile app development services, custom software development for businesses, modern website building, next-gen web interfaces" 
+            <SEO
+                title="Syntaxt | Custom Fullstack Development & Automation"
+                description="Syntaxt builds custom fullstack web apps, mobile apps, and business automation solutions. Fast, modern, and built to scale."
+                keywords="custom fullstack development, business automation solutions, mobile app development, custom software development, modern website building, next-gen web interfaces"
+                jsonLd={HOME_JSON_LD}
             />
             <Navbar onOpenContact={() => setIsContactOpen(true)} />
             <Hero />

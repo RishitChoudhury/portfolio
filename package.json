@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "aws-sdk": "^2.1693.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.0.0",

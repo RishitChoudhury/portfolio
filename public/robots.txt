@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://syntaxt.vercel.app/sitemap.xml
+Sitemap: https://www.syntaxt.dev/sitemap.xml
