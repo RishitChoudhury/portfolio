@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" fill="#0a0a0a" rx="12"/>
+  <!-- Left bracket -->
+  <text x="8" y="88" font-family="monospace" font-size="76" font-weight="bold" fill="#FF003C">&lt;</text>
+  <!-- Slash mark -->
+  <path d="M 56 22 L 72 98 L 82 98 L 66 22 Z" fill="#FFFFFF"/>
+  <!-- Right bracket -->
+  <text x="74" y="88" font-family="monospace" font-size="76" font-weight="bold" fill="#FF003C">&gt;</text>
+</svg>
