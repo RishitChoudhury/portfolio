@@ -5,6 +5,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CyberScheduler from './pages/CyberScheduler';
 import CaseStudyShapingHearts from './pages/CaseStudyShapingHearts';
+import Admin from './pages/Admin';
+import AdminLogin from './pages/AdminLogin';
+import WhatsAppButton from './components/WhatsAppButton';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
     // Custom Cursor
@@ -28,10 +32,13 @@ function App() {
 
     return (
         <BrowserRouter>
+            <WhatsAppButton />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/schedule" element={<CyberScheduler />} />
                 <Route path="/case-study/shaping-hearts" element={<CaseStudyShapingHearts />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             </Routes>
         </BrowserRouter>
     )

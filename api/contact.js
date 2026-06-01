@@ -1,5 +1,16 @@
 import nodemailer from 'nodemailer';
 import { getAutoReplyEmailTemplate } from './emailTemplate.js';
+import { getDb } from './db.js';
+
+// Encode user input before interpolating into HTML to prevent XSS in email clients
+function he(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 export default async function handler(req, res) {
     // Only allow POST
@@ -18,6 +29,19 @@ export default async function handler(req, res) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return res.status(400).json({ error: 'Invalid email address' });
+    }
+
+    // Input length limits
+    if (email.length > 254 || projectType.length > 100 || description.length > 5000) {
+        return res.status(400).json({ error: 'Input exceeds maximum allowed length' });
+    }
+
+    // Persist lead to database — non-blocking (DB failure must not break email delivery)
+    try {
+        const sql = getDb();
+        await sql`INSERT INTO leads (email, project_type, description) VALUES (${email}, ${projectType}, ${description})`;
+    } catch (dbErr) {
+        console.error('Neon lead insert error (non-blocking):', dbErr.message);
     }
 
     // Create transporter with Google SMTP
@@ -49,7 +73,7 @@ export default async function handler(req, res) {
                     SENDER_EMAIL //
                 </td>
                 <td style="padding: 12px 0; color: #fff; font-size: 14px;">
-                    <a href="mailto:${email}" style="color: #00ff88;">${email}</a>
+                    <a href="mailto:${he(email)}" style="color: #00ff88;">${he(email)}</a>
                 </td>
             </tr>
             <tr>
@@ -57,7 +81,7 @@ export default async function handler(req, res) {
                     PROJECT_TYPE //
                 </td>
                 <td style="padding: 12px 0; color: #fff; font-size: 14px;">
-                    ${projectType}
+                    ${he(projectType)}
                 </td>
             </tr>
             <tr>
@@ -65,7 +89,7 @@ export default async function handler(req, res) {
                     DESCRIPTION //
                 </td>
                 <td style="padding: 12px 0; color: #fff; font-size: 14px; line-height: 1.6;">
-                    ${description.replace(/\n/g, '<br>')}
+                    ${he(description).replace(/\n/g, '<br>')}
                 </td>
             </tr>
         </table>

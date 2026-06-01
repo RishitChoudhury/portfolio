@@ -155,6 +155,11 @@
     .massive-cta {
         font-size: clamp(3rem, 15vw, 6rem);
         margin-bottom: 2rem;
+        text-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
+    }
+
+    .footer-cta-container {
+        margin-bottom: 5rem;
     }
 
     .cta-action-row {

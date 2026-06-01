@@ -1,0 +1,22 @@
+.whatsapp-fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--secondary-color, #0A0A0A);
+    border: 1px solid var(--border-color, #333333);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary, #FFFFFF);
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-fab:hover {
+    border-color: var(--primary-color, #FF003C);
+    box-shadow: 0 0 14px rgba(255, 0, 60, 0.5);
+}

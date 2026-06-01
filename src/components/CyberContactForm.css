@@ -240,15 +240,27 @@
 
 @media (max-width: 768px) {
     .contact-modal-overlay {
-        padding: 0.5rem;
+        padding: 0;
+        align-items: flex-end;
     }
 
     .contact-console {
         padding: 2rem 1.5rem;
+        max-height: 92vh;
+        overflow-y: auto;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Move close button inside the modal on mobile */
+    .console-close {
+        top: 1rem;
+        right: 1rem;
     }
 
     .console-header {
         font-size: 1.25rem;
+        margin-top: 0;
     }
 
     .console-input {
@@ -259,5 +271,9 @@
     .console-submit-btn {
         padding: 1rem;
         font-size: 1rem;
+    }
+
+    .terminal-loading-state {
+        min-height: 260px;
     }
 }

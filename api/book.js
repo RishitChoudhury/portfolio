@@ -1,6 +1,16 @@
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import { parse, addHours } from 'date-fns';
+import { getDb } from './db.js';
+
+function he(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 /**
  * Creates an OAuth2 client using stored refresh token.
@@ -100,8 +110,34 @@ export default async function handler(req, res) {
 
             console.log('✅ Calendar event created:', createdEvent.data.id);
             console.log('   Meet link:', meetLink);
+
+            if (!meetLink) {
+                console.warn('⚠️  hangoutLink is empty — check that Google OAuth env vars are set in Vercel');
+                console.warn('   and that conferenceData was returned:', JSON.stringify(createdEvent.data.conferenceData));
+            }
         } else {
             console.warn('⚠️  OAuth2 credentials not configured — skipping calendar creation.');
+        }
+
+        // ---------- PERSIST BOOKING TO DATABASE ----------
+        try {
+            const sql = getDb();
+            const [lead] = await sql`
+                SELECT id FROM leads WHERE email = ${email}
+                ORDER BY submitted_at DESC LIMIT 1
+            `;
+            const leadId = lead?.id ?? null;
+
+            await sql`
+                INSERT INTO bookings (lead_id, email, meeting_date, meeting_time, project_type, meet_link, calendar_event_link)
+                VALUES (${leadId}, ${email}, ${date}, ${time}, ${projectType || null}, ${meetLink || null}, ${calendarEventLink || null})
+            `;
+
+            if (leadId) {
+                await sql`UPDATE leads SET status = 'booked' WHERE id = ${leadId}`;
+            }
+        } catch (dbErr) {
+            console.error('Neon booking insert error (non-blocking):', dbErr.message);
         }
 
         // ---------- CONFIRMATION EMAIL ----------
@@ -135,15 +171,15 @@ export default async function handler(req, res) {
                 <table style="width: 100%; text-align: left; border-collapse: collapse;">
                     <tr>
                         <td style="padding: 10px 0; color: #888; width: 150px;">DATE //</td>
-                        <td style="color: #fff;">${meetStart.toDateString()}</td>
+                        <td style="color: #fff;">${he(meetStart.toDateString())}</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #888;">TIME //</td>
-                        <td style="color: #fff;">${time} IST</td>
+                        <td style="color: #fff;">${he(time)} IST</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #888;">TYPE //</td>
-                        <td style="color: #fff;">${projectType || 'General Inquiry'}</td>
+                        <td style="color: #fff;">${he(projectType || 'General Inquiry')}</td>
                     </tr>
                 </table>
 
@@ -167,6 +203,6 @@ export default async function handler(req, res) {
 
     } catch (err) {
         console.error('Booking Error:', err);
-        res.status(500).json({ error: err.message || 'Failed to initialize calendar sequence' });
+        res.status(500).json({ error: 'Failed to initialize calendar sequence' });
     }
 }
