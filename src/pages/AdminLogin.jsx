@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 export default function AdminLogin() {
     const [password, setPassword] = useState('');
@@ -39,6 +40,10 @@ export default function AdminLogin() {
     };
 
     return (
+        <>
+        <Helmet>
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Helmet>
         <div style={{
             minHeight: '100vh',
             background: '#030303',
@@ -147,5 +152,6 @@ export default function AdminLogin() {
                 </form>
             </div>
         </div>
+        </>
     );
 }

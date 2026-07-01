@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { getAutoReplyEmailTemplate } from './emailTemplate.js';
 import { getDb } from './db.js';
+import { getIp, checkRateLimit, recordAttempt } from './rateLimit.js';
 
 // Encode user input before interpolating into HTML to prevent XSS in email clients
 function he(str) {
@@ -36,6 +37,20 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Input exceeds maximum allowed length' });
     }
 
+    // Rate limiting: 5 requests per IP per hour, 3 per email per hour
+    const ip = getIp(req);
+    const { limited, reason } = await checkRateLimit({
+        ip,
+        action: 'contact',
+        maxPerIp: 5,
+        windowMs: 60 * 60 * 1000,
+        email,
+        maxPerEmail: 3,
+    });
+    if (limited) {
+        return res.status(429).json({ error: reason });
+    }
+
     // Persist lead to database — non-blocking (DB failure must not break email delivery)
     try {
         const sql = getDb();
@@ -43,6 +58,9 @@ export default async function handler(req, res) {
     } catch (dbErr) {
         console.error('Neon lead insert error (non-blocking):', dbErr.message);
     }
+
+    // Record rate limit attempt after validation passes
+    recordAttempt({ ip, action: 'contact', email });
 
     // Create transporter with Google SMTP
     const transporter = nodemailer.createTransport({

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
@@ -387,6 +388,10 @@ export default function Admin() {
     }
 
     return (
+        <>
+        <Helmet>
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Helmet>
         <div style={{ minHeight: '100vh', background: '#030303', padding: '2rem', color: '#FFFFFF' }}>
 
             {/* Header */}
@@ -450,5 +455,6 @@ export default function Admin() {
             <LeadsTable leads={leads} onUpdate={handleLeadUpdate} />
             <BookingsTable bookings={bookings} />
         </div>
+        </>
     );
 }

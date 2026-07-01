@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import { parse, addHours } from 'date-fns';
 import { getDb } from './db.js';
+import { getIp, checkRateLimit, recordAttempt } from './rateLimit.js';
 
 function he(str) {
     return String(str)
@@ -35,6 +36,32 @@ export default async function handler(req, res) {
 
     if (!date || !time || !email) {
         return res.status(400).json({ error: 'Missing required sync parameters' });
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: 'Invalid email address' });
+    }
+
+    // Reject bookings in the past
+    const today = new Date().toISOString().split('T')[0];
+    if (date < today) {
+        return res.status(400).json({ error: 'Cannot book a meeting in the past' });
+    }
+
+    // Rate limiting: 3 requests per IP per hour, 2 per email per hour
+    const ip = getIp(req);
+    const { limited, reason } = await checkRateLimit({
+        ip,
+        action: 'book',
+        maxPerIp: 3,
+        windowMs: 60 * 60 * 1000,
+        email,
+        maxPerEmail: 2,
+    });
+    if (limited) {
+        return res.status(429).json({ error: reason });
     }
 
     try {
@@ -139,6 +166,9 @@ export default async function handler(req, res) {
         } catch (dbErr) {
             console.error('Neon booking insert error (non-blocking):', dbErr.message);
         }
+
+        // Record rate limit attempt after successful booking creation
+        recordAttempt({ ip, action: 'book', email });
 
         // ---------- CONFIRMATION EMAIL ----------
         const transporter = nodemailer.createTransport({
